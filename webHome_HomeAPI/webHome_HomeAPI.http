@@ -1,0 +1,6 @@
+@webHome_HomeAPI_HostAddress = http://localhost:5079
+
+GET {{webHome_HomeAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
