@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using webHome_HomeAPI.Data;
 using webHome_HomeAPI.Models;
 using webHome_HomeAPI.Models.Dto;
 
@@ -11,11 +12,13 @@ namespace webHome_HomeAPI.Controllers
         [HttpGet]
         public IEnumerable<HomeDTO> GetHomes()
         {
-            return new List<HomeDTO>() { 
-                new HomeDTO { Id = 1, Name = "Home 1" },
-                new HomeDTO { Id = 2, Name = "Home 2" }
-            };
-            
+            return HomeStore.homeList;
+        }
+
+        [HttpGet("id")]
+        public HomeDTO GetHome(int id)
+        {
+            return HomeStore.homeList.FirstOrDefault(u=>u.Id==id);
         }
     }
 }
