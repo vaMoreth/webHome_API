@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using webHome_HomeAPI.Data;
+using webHome_HomeAPI.Logging;
 using webHome_HomeAPI.Models;
 using webHome_HomeAPI.Models.Dto;
 
@@ -11,19 +12,28 @@ namespace webHome_HomeAPI.Controllers
     [ApiController]
     public class HomeAPIController : ControllerBase
     {
-        private readonly ILogger<HomeAPIController> _logger;
-
-        public HomeAPIController(ILogger<HomeAPIController> logger) 
+        private readonly ILogging _logger;
+        
+        public HomeAPIController(ILogging logger)
         {
             _logger = logger;
         }
+
+        #region BasicLogger
+        //private readonly ILogger<HomeAPIController> _logger;
+
+        //public HomeAPIController(ILogger<HomeAPIController> logger) 
+        //{
+        //    _logger = logger;
+        //}
+        #endregion
 
         #region GetAll
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<HomeDTO>> GetHomes()
         {
-            _logger.LogInformation("Getting All Homes");
+            _logger.Log("Getting All Homes", "");
             return Ok(HomeStore.homeList);
         }
         #endregion
@@ -37,7 +47,7 @@ namespace webHome_HomeAPI.Controllers
         {
             if (id == 0)
             {
-                _logger.LogError("Get home error with Id: " + id);
+                _logger.Log("Get home error with Id: " + id, "error");
                 return BadRequest();
             }
 
