@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 //Log.Logger = new LoggerConfiguration().MinimumLevel.Debug()
 //    .WriteTo.File("log/homeLogs.txt", rollingInterval: RollingInterval.Day).CreateLogger();
-//builder.Host.UseSerilog();
+//builder.Host.UseSerilog(); // It's all for use Serilog writing in file;
 
 //builder.Services.AddControllers().AddNewtonsoftJson();
 
@@ -16,7 +16,8 @@ builder.Services.AddControllers(option => {
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<ILogging, Logging>();
+
+//builder.Services.AddSingleton<ILogging, Logging>(); //Custom Logger
 
 var app = builder.Build();
 

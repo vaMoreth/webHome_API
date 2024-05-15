@@ -12,17 +12,19 @@ namespace webHome_HomeAPI.Controllers
     [ApiController]
     public class HomeAPIController : ControllerBase
     {
-        private readonly ILogging _logger;
-        
-        public HomeAPIController(ILogging logger)
-        {
-            _logger = logger;
-        }
+        #region CustomLogger
+        //private readonly ILogging _logger;
+
+        //public HomeAPIController(ILogging logger)
+        //{
+        //    _logger = logger;
+        //}
+        #endregion
 
         #region BasicLogger
         //private readonly ILogger<HomeAPIController> _logger;
 
-        //public HomeAPIController(ILogger<HomeAPIController> logger) 
+        //public HomeAPIController(ILogger<HomeAPIController> logger)
         //{
         //    _logger = logger;
         //}
@@ -33,7 +35,7 @@ namespace webHome_HomeAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<HomeDTO>> GetHomes()
         {
-            _logger.Log("Getting All Homes", "");
+            //_logger.LogInformation("Getting All Homes");
             return Ok(HomeStore.homeList);
         }
         #endregion
@@ -47,7 +49,7 @@ namespace webHome_HomeAPI.Controllers
         {
             if (id == 0)
             {
-                _logger.Log("Get home error with Id: " + id, "error");
+                //_logger.LogError("Get home error with Id: " + id);
                 return BadRequest();
             }
 
