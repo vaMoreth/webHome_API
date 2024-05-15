@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using webHome_HomeAPI.Data;
 using webHome_HomeAPI.Models;
@@ -29,7 +30,7 @@ namespace webHome_HomeAPI.Controllers
             if (id == 0)
                 return BadRequest();
 
-            var home = HomeStore.homeList.FirstOrDefault(u=>u.Id==id);
+            var home = HomeStore.homeList.FirstOrDefault(u => u.Id == id);
 
             if (home == null)
                 return NotFound();
@@ -43,7 +44,7 @@ namespace webHome_HomeAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<HomeDTO> CreateHome([FromBody]HomeDTO homeDTO)
+        public ActionResult<HomeDTO> CreateHome([FromBody] HomeDTO homeDTO)
         {
             #region Validators
 
@@ -68,7 +69,7 @@ namespace webHome_HomeAPI.Controllers
             homeDTO.Id = HomeStore.homeList.OrderByDescending(u => u.Id).FirstOrDefault().Id + 1;
             HomeStore.homeList.Add(homeDTO);
 
-            return CreatedAtRoute("GetHome", new {id = homeDTO.Id }, homeDTO);
+            return CreatedAtRoute("GetHome", new { id = homeDTO.Id }, homeDTO);
         }
         #endregion
 
@@ -77,7 +78,7 @@ namespace webHome_HomeAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete("id", Name = "DeleteHome")]
-        public IActionResult DeleteHome(int id) 
+        public IActionResult DeleteHome(int id)
         {
             if (id == 0)
                 return BadRequest();
@@ -89,6 +90,49 @@ namespace webHome_HomeAPI.Controllers
 
             HomeStore.homeList.Remove(home);
             return NoContent();
+        }
+        #endregion
+
+        #region Put
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPut("id", Name = "UpdateHome")]
+        public IActionResult UpdateHome(int id, [FromBody] HomeDTO homeDTO)
+        {
+            if(homeDTO == null || id != homeDTO.Id)
+                return BadRequest();
+
+            var home = HomeStore.homeList.FirstOrDefault(u => u.Id == id);
+
+            home.Name = homeDTO.Name;
+            home.Occupancy = homeDTO.Occupancy;
+            home.Sqft = homeDTO.Sqft;
+
+            return NoContent();
+        }
+        #endregion
+
+        #region Patch
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPatch("id", Name = "UpdatePartialHome")]
+        public IActionResult UpdatePartialHome(int id, JsonPatchDocument<HomeDTO> patchDTO)
+        {
+            if (patchDTO == null || id == 0)
+                return BadRequest();
+
+            var home = HomeStore.homeList.FirstOrDefault(u => u.Id == id);
+
+            if (home == null)
+                return BadRequest();
+
+            patchDTO.ApplyTo(home, ModelState);
+
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return NoContent();
+
         }
         #endregion
     }
