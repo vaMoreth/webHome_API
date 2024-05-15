@@ -10,13 +10,16 @@ namespace webHome_HomeAPI.Controllers
     [ApiController]
     public class HomeAPIController : ControllerBase
     {
+        #region GetAll
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<HomeDTO>> GetHomes()
         {
             return Ok(HomeStore.homeList);
         }
+        #endregion
 
+        #region GetId
         [HttpGet("id", Name = "GetHome")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -33,7 +36,9 @@ namespace webHome_HomeAPI.Controllers
 
             return Ok(home);
         }
+        #endregion
 
+        #region Post
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -65,5 +70,26 @@ namespace webHome_HomeAPI.Controllers
 
             return CreatedAtRoute("GetHome", new {id = homeDTO.Id }, homeDTO);
         }
+        #endregion
+
+        #region Delete
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpDelete("id", Name = "DeleteHome")]
+        public IActionResult DeleteHome(int id) 
+        {
+            if (id == 0)
+                return BadRequest();
+
+            var home = HomeStore.homeList.FirstOrDefault(u => u.Id == id);
+
+            if (home == null)
+                return NotFound();
+
+            HomeStore.homeList.Remove(home);
+            return NoContent();
+        }
+        #endregion
     }
 }
