@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using Serilog;
+using webHome_HomeAPI.Data;
 using webHome_HomeAPI.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,8 +12,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 //builder.Services.AddControllers().AddNewtonsoftJson();
 
+
+builder.Services.AddDbContext<ApplicationDbContext>(option =>
+{
+    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
 builder.Services.AddControllers(option => {
-    //option.ReturnHttpNotAcceptable = true;
+    //option.ReturnHttpNotAcceptable = true; //Denied access for application/json reading
 }).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
 
 builder.Services.AddEndpointsApiExplorer();
