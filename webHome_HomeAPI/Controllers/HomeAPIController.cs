@@ -12,6 +12,12 @@ namespace webHome_HomeAPI.Controllers
     [ApiController]
     public class HomeAPIController : ControllerBase
     {
+        private readonly ApplicationDbContext _db;
+        public HomeAPIController(ApplicationDbContext db)
+        {
+            _db = db;
+        }
+
         #region CustomLogger
         //private readonly ILogging _logger;
 
@@ -36,7 +42,7 @@ namespace webHome_HomeAPI.Controllers
         public ActionResult<IEnumerable<HomeDTO>> GetHomes()
         {
             //_logger.LogInformation("Getting All Homes");
-            return Ok(HomeStore.homeList);
+            return Ok(_db.Homes.ToList());
         }
         #endregion
 
@@ -53,7 +59,7 @@ namespace webHome_HomeAPI.Controllers
                 return BadRequest();
             }
 
-            var home = HomeStore.homeList.FirstOrDefault(u => u.Id == id);
+            var home = _db.Homes.FirstOrDefault(u => u.Id == id);
 
             if (home == null)
                 return NotFound();
@@ -74,12 +80,11 @@ namespace webHome_HomeAPI.Controllers
             //if (!ModelState.IsValid)
             //    return BadRequest(ModelState);
 
-            if (HomeStore.homeList.FirstOrDefault(u => u.Name.ToLower() == homeDTO.Name.ToLower()) != null)
+            if (_db.Homes.FirstOrDefault(u => u.Name.ToLower() == homeDTO.Name.ToLower()) != null)
             {
                 ModelState.AddModelError("CustomError", "Home name already Exists!");
                 return BadRequest(ModelState);
             }
-
 
             if (homeDTO == null)
                 return BadRequest();
@@ -89,8 +94,23 @@ namespace webHome_HomeAPI.Controllers
 
             #endregion
 
-            homeDTO.Id = HomeStore.homeList.OrderByDescending(u => u.Id).FirstOrDefault().Id + 1;
-            HomeStore.homeList.Add(homeDTO);
+            Home model = new()
+            {
+                Amenity = homeDTO.Amenity,
+                Details = homeDTO.Details,
+                Id = homeDTO.Id,
+                ImageUrl = homeDTO.ImageUrl,
+                Name = homeDTO.Name,
+                Occupancy = homeDTO.Occupancy,
+                Rate = homeDTO.Rate,
+                Sqft = homeDTO.Sqft
+            };
+
+            _db.Homes.Add(model);
+            _db.SaveChanges();
+
+            //homeDTO.Id = HomeStore.homeList.OrderByDescending(u => u.Id).FirstOrDefault().Id + 1;
+            //HomeStore.homeList.Add(homeDTO);
 
             return CreatedAtRoute("GetHome", new { id = homeDTO.Id }, homeDTO);
         }
@@ -106,12 +126,13 @@ namespace webHome_HomeAPI.Controllers
             if (id == 0)
                 return BadRequest();
 
-            var home = HomeStore.homeList.FirstOrDefault(u => u.Id == id);
+            var home = _db.Homes.FirstOrDefault(u => u.Id == id);
 
             if (home == null)
                 return NotFound();
 
-            HomeStore.homeList.Remove(home);
+            _db.Homes.Remove(home);
+            _db.SaveChanges();
             return NoContent();
         }
         #endregion
@@ -125,11 +146,26 @@ namespace webHome_HomeAPI.Controllers
             if(homeDTO == null || id != homeDTO.Id)
                 return BadRequest();
 
-            var home = HomeStore.homeList.FirstOrDefault(u => u.Id == id);
+            //var home = HomeStore.homeList.FirstOrDefault(u => u.Id == id);
 
-            home.Name = homeDTO.Name;
-            home.Occupancy = homeDTO.Occupancy;
-            home.Sqft = homeDTO.Sqft;
+            //home.Name = homeDTO.Name;
+            //home.Occupancy = homeDTO.Occupancy;
+            //home.Sqft = homeDTO.Sqft;
+
+            Home model = new()
+            {
+                Amenity = homeDTO.Amenity,
+                Details = homeDTO.Details,
+                Id = homeDTO.Id,
+                ImageUrl = homeDTO.ImageUrl,
+                Name = homeDTO.Name,
+                Occupancy = homeDTO.Occupancy,
+                Rate = homeDTO.Rate,
+                Sqft = homeDTO.Sqft
+            };
+
+            _db.Homes.Update(model);
+            _db.SaveChanges();
 
             return NoContent();
         }
@@ -144,14 +180,41 @@ namespace webHome_HomeAPI.Controllers
             if (patchDTO == null || id == 0)
                 return BadRequest();
 
-            var home = HomeStore.homeList.FirstOrDefault(u => u.Id == id);
+            var home = _db.Homes.FirstOrDefault(u => u.Id == id);
+
+            HomeDTO homeDTO = new()
+            {
+                Amenity = home.Amenity,
+                Details = home.Details,
+                Id = home.Id,
+                ImageUrl = home.ImageUrl,
+                Name = home.Name,
+                Occupancy = home.Occupancy,
+                Rate = home.Rate,
+                Sqft = home.Sqft
+            };
 
             if (home == null)
                 return BadRequest();
 
-            patchDTO.ApplyTo(home, ModelState);
+            patchDTO.ApplyTo(homeDTO, ModelState);
 
-            if(!ModelState.IsValid)
+            Home model = new Home()
+            {
+                Amenity = homeDTO.Amenity,
+                Details = homeDTO.Details,
+                Id = homeDTO.Id,
+                ImageUrl = homeDTO.ImageUrl,
+                Name = homeDTO.Name,
+                Occupancy = homeDTO.Occupancy,
+                Rate = homeDTO.Rate,
+                Sqft = homeDTO.Sqft
+            };
+
+            _db.Homes.Update(model);
+            _db.SaveChanges();
+
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             return NoContent();
