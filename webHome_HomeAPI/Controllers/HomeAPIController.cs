@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using webHome_HomeAPI.Data;
 using webHome_HomeAPI.Logging;
 using webHome_HomeAPI.Models;
@@ -180,7 +181,7 @@ namespace webHome_HomeAPI.Controllers
             if (patchDTO == null || id == 0)
                 return BadRequest();
 
-            var home = _db.Homes.FirstOrDefault(u => u.Id == id);
+            var home = _db.Homes.AsNoTracking().FirstOrDefault(u => u.Id == id);
 
             HomeDTO homeDTO = new()
             {
