@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using webHome_HomeAPI.Data;
 
@@ -11,9 +12,11 @@ using webHome_HomeAPI.Data;
 namespace webHome_HomeAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240518063528_FilledInHomeTable")]
+    partial class FilledInHomeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,7 +73,7 @@ namespace webHome_HomeAPI.Migrations
                         {
                             Id = 1,
                             Amenity = "",
-                            CreatedDate = new DateTime(2024, 5, 18, 8, 38, 49, 703, DateTimeKind.Local).AddTicks(5275),
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Details = "Et egestas quis ipsum suspendisse ultrices. Volutpat est velit egestas dui id ornare arcu.",
                             ImageUrl = "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
                             Name = "Home 1",
@@ -83,7 +86,7 @@ namespace webHome_HomeAPI.Migrations
                         {
                             Id = 2,
                             Amenity = "",
-                            CreatedDate = new DateTime(2024, 5, 18, 8, 38, 49, 703, DateTimeKind.Local).AddTicks(5328),
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Details = "Et egestas quis ipsum suspendisse ultrices. Volutpat est velit egestas dui id ornare arcu.",
                             ImageUrl = "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
                             Name = "Home 2",
@@ -96,7 +99,7 @@ namespace webHome_HomeAPI.Migrations
                         {
                             Id = 3,
                             Amenity = "",
-                            CreatedDate = new DateTime(2024, 5, 18, 8, 38, 49, 703, DateTimeKind.Local).AddTicks(5331),
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Details = "Et egestas quis ipsum suspendisse ultrices. Volutpat est velit egestas dui id ornare arcu.",
                             ImageUrl = "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
                             Name = "Home 3",
@@ -109,7 +112,7 @@ namespace webHome_HomeAPI.Migrations
                         {
                             Id = 4,
                             Amenity = "",
-                            CreatedDate = new DateTime(2024, 5, 18, 8, 38, 49, 703, DateTimeKind.Local).AddTicks(5334),
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Details = "Et egestas quis ipsum suspendisse ultrices. Volutpat est velit egestas dui id ornare arcu.",
                             ImageUrl = "https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
                             Name = "Home 4",
@@ -122,7 +125,7 @@ namespace webHome_HomeAPI.Migrations
                         {
                             Id = 5,
                             Amenity = "",
-                            CreatedDate = new DateTime(2024, 5, 18, 8, 38, 49, 703, DateTimeKind.Local).AddTicks(5337),
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Details = "Et egestas quis ipsum suspendisse ultrices. Volutpat est velit egestas dui id ornare arcu.",
                             ImageUrl = "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
                             Name = "Home 5",
